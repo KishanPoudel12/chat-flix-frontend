@@ -4,24 +4,23 @@ import {FaGithub} from  "react-icons/fa"// Import the GitHub icon
 
 export default function Navbar() {
   return (
-    <nav className="bg-yellow-200 text-yellow-900 p-4 shadow-md">
+    <nav className="bg-yellow-50 text-yellow-900 p-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold hover:text-yellow-800 transition">
           ChatFlix
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Link href="/home" className="hover:underline">
+          <Link href="/home" className="">
             Home
           </Link>
-          <Link href="/about" className="hover:underline">
+          <Link href="/about" className="">
             About
           </Link>
-          <Link href="/contact" className="hover:underline">
+          <Link href="/contact" className="">
             Contact
           </Link>
 
-          {/* GitHub Icon */}
           <a
             href="https://github.com/kishanpoudel12"
             target="_blank"
