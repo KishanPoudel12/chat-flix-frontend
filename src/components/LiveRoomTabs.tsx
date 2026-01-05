@@ -1,41 +1,14 @@
-import Room from "./../types/room"
-
-const roomsData: Room[] = [
-  {
-    room_name: "Movie Night",
-    host_id: 1,
-    host_name: "kishan",
-    room_description: "Watching Inception tonight",
-    video_url: "https://youtu.be/Yo123abc",
-    video_provider: "youtube",
-    is_live: true,
-    is_private: false,
-    max_members: 10,
-    active_members: 5,
-    scheduled_start: "2026-01-04T05:19:46.633Z",
-  },
-  {
-    room_name: "Chill Vibes",
-    host_id: 2,
-    host_name: "milla",
-    room_description: "Relaxing music session",
-    video_url: "https://youtu.be/Mu789lmn",
-    video_provider: "youtube",
-    is_live: false,
-    is_private: false,
-    max_members: 20,
-    active_members: 0,
-    scheduled_start: "2026-01-06T20:00:00.000Z",
-  },
-];
+import Room, {RoomsResponse} from "./../types/room"
 
 
-export default function RoomsTab() {
+
+export default function RoomsTab({liverooms}:{liverooms:RoomsResponse}) {
+  const roomsData=liverooms
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {roomsData.map((room) => (
+      {roomsData.map((room,ind) => (
         <div
-          key={room.room_name}
+          key={ind}
           className="flex flex-col justify-between p-4 bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer"
         >
           {/* Room Info */}
@@ -47,16 +20,15 @@ export default function RoomsTab() {
               {room.room_description}
             </p>
             <p className="text-xs text-gray-400 mb-1">
-              Host: {room.host_name}
+              Host: Kishan
             </p>
             <p className={`text-xs font-medium mb-3 ${
               room.is_live ? "text-red-500" : "text-gray-500"
             }`}>
-              {room.is_live ? "🔴 Live" : "⏳ Scheduled"} • {room.active_members} / {room.max_members} members
+              {room.is_live ? "🔴 Live" : "⏳ Scheduled"} • {room.current_members} / {room.max_members} members
             </p>
           </div>
 
-          {/* Join Button */}
           <button
             className={`mt-auto px-4 py-2 rounded-md font-medium transition ${
               room.is_live

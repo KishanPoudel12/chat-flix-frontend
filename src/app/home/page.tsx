@@ -5,6 +5,7 @@ import RoomsTab from "./../../components/RoomTabs";
 import LiveRoomsTab from "./../../components/LiveRoomTabs";
 import CreateRoom from "@/src/components/CreateRoom";
 import useFetch from "@/src/apis/apis";
+import {Room, RoomsResponse} from "@/src/types/room";
 
 
 
@@ -49,12 +50,16 @@ export default function Home() {
 
 
   useEffect( ()=>{
-
     const fetchRooms =async ()=>{
     try{
-      const response = fetchData(URL+"/rooms".replace(/\/$/, ""),{
+      const token:string|null= localStorage.getItem("access_token")
+      console.log(token)
+      const response =await  fetchData(URL+"/rooms/",{
         method: "GET",
-        credentials:"include",
+         headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          }
       })
 
       if (response){
@@ -65,13 +70,12 @@ export default function Home() {
         console.log(err)
       }
     }
-
   fetchRooms()
-  },[])
+  },[URL])
 
   const rooms = data ?? []
   console.log(rooms)
-  const live_rooms= rooms.filter((room:any)=> room.is_live)
+  const live_rooms= rooms.filter((room:Room)=> room.is_live)
   console.log(live_rooms)
 
   const printErr=(er:string|null)=>console.log(er)
@@ -106,8 +110,8 @@ export default function Home() {
   </div>
 </div>
         {createRoom&&<CreateRoom handleModalClose={handleCreateRoomClose} />}
-      {activeTab === "rooms" && <RoomsTab />}
-      {activeTab === "live" && <LiveRoomsTab />}
+      {activeTab === "rooms" && <RoomsTab  rooms={ rooms}/>}
+      {activeTab === "live" && <LiveRoomsTab liverooms={live_rooms} />}
     </div>
   );
 }

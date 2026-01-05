@@ -1,13 +1,37 @@
-interface Room {
-  room_name: string;        // Name of the room
-  host_id: number;          // Host user ID
-  host_name: string;        // Host username
-  room_description: string; // Short description
-  video_url: string;        // Video link (YouTube/Vimeo/etc.)
-  video_provider: string;   // "youtube", "vimeo", etc.
-  is_live: boolean;         // True if live, false if scheduled
-  is_private: boolean;      // True if private room
-  max_members: number;      // Max members allowed
-  active_members: number;   // Current active members count
-  scheduled_start: string;  // ISO date/time of scheduled start
+export interface RoomMember {
+  id: number;
+  user_id: number;
+  role: string;
+  username: string;
+  joined_at: string; // ISO datetime string
+}
+
+export interface Room {
+  id: number;
+  room_name: string;
+  host_id: number;
+  room_description: string | null;
+  video_url: string;
+  video_provider: string | null;
+  is_live: boolean;
+  is_private: boolean;
+  current_members: number;
+  max_members: number;
+  scheduled_start: string; // ISO datetime string
+  members: RoomMember[];
+}
+
+export type RoomsResponse = Room[];
+
+
+
+
+
+export interface CreateRoomPayload {
+  room_name: string;
+  room_description: string;
+  video_url: string;
+  video_provider: string ; // adjust if needed
+  is_private: boolean;
+  max_members: number;
 }

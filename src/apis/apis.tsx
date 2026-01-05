@@ -15,7 +15,18 @@ const useFetch=()=>{
         console.log(url)
         try{
             const res= await fetch(url, options)
-            const json=await  res.json()
+            console.log("Response status:", res.status);
+
+            res.headers.forEach((value:string, key) => {
+                console.table(key, ":", value);
+              });
+
+            let json:any = null
+            try{
+                json= await res.json()
+            }catch {
+                json=null
+            }
 
             if (!res.ok){
                 throw new Error(json.message ||"Something went Wrong")
@@ -24,7 +35,7 @@ const useFetch=()=>{
             return json
         }catch (err:any){
             setError(err.message)
-            console.log(err.message)
+            // console.log(err.message)
             return null
         }finally{
             setIsLoading(false)

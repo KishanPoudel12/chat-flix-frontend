@@ -16,10 +16,8 @@ export const Login = () => {
   const { error, isLoading, fetchData} = useFetch()
 
   const handleLoginChange=(e:React.ChangeEvent<HTMLInputElement>)=>setLogin({...login,[e.target.name]:e.target.value})
-
   const handleLoginSubmit=async (e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
-
     try {
       const formdata= new FormData()
       formdata.append("username", login.username)
@@ -28,18 +26,17 @@ export const Login = () => {
       const response =await  fetchData(URL+"/auth/login", {
           method: "POST",
           body: formdata,
+          credentials: "include",
       })
+
       if (response) {
           console.log("Signup successful:", response);
-          document.cookie=`access_token=${response.access_token}; path=/; max-age=${60*60*24}`
+          localStorage.setItem("access_token", response.access_token)
           router.push("/home")
         }
-
     }catch (err){
       console.log("Error", err)
     }
-
-
   }
 
   return (
