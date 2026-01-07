@@ -17,9 +17,9 @@ const useFetch=()=>{
             const res= await fetch(url, options)
             console.log("Response status:", res.status);
 
-            res.headers.forEach((value:string, key) => {
-                console.table(key, ":", value);
-              });
+            // res.headers.forEach((value:string, key) => {
+            //     console.table(key, value);
+            //   });
 
             let json:any = null
             try{
@@ -35,7 +35,6 @@ const useFetch=()=>{
             return json
         }catch (err:any){
             setError(err.message)
-            // console.log(err.message)
             return null
         }finally{
             setIsLoading(false)

@@ -49,9 +49,7 @@ export default function CreateRoom({ handleModalClose }: { handleModalClose: () 
     }catch (err){
       console.log("Error",err)
     }
-
   }
-
   return (
     <div className="fixed  min-h-screen min-w-screen inset-0 bg-yellow-450 bg-opacity-900 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-md p-6">

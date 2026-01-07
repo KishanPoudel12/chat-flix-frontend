@@ -7,9 +7,13 @@ import CreateRoom from "@/src/components/CreateRoom";
 import useFetch from "@/src/apis/apis";
 import {Room, RoomsResponse} from "@/src/types/room";
 
+import {jwtDecode} from "jwt-decode";
 
 
-
+interface JwtPayload {
+  user_id: number;
+  exp:number;
+}
 
 /*
 room structure
@@ -36,9 +40,11 @@ room structure
 
 
 
-type Tab = "rooms" | "live" ;
+type Tab = "rooms" | "live" |"myRooms";
 
 export default function Home() {
+
+  const [userId, setUserId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("rooms");
   const [createRoom, setCreateRoom]=useState<boolean>(false)
   const { data, error, isLoading, fetchData } = useFetch()
@@ -48,12 +54,20 @@ export default function Home() {
   const handleCreateRoom=()=> setCreateRoom(true)
   const handleCreateRoomClose=()=> setCreateRoom(false)
 
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      const decoded = jwtDecode<JwtPayload>(token);
+      setUserId(decoded.user_id)
+    }
+
+  }, []);
 
   useEffect( ()=>{
     const fetchRooms =async ()=>{
     try{
-      const token:string|null= localStorage.getItem("access_token")
-      console.log(token)
+
+      const token = localStorage.getItem("access_token");
       const response =await  fetchData(URL+"/rooms/",{
         method: "GET",
          headers: {
@@ -73,10 +87,17 @@ export default function Home() {
   fetchRooms()
   },[URL])
 
-  const rooms = data ?? []
+  const rooms = data?.filter((room:Room)=>!room.is_private) ?? []
   console.log(rooms)
   const live_rooms= rooms.filter((room:Room)=> room.is_live)
   console.log(live_rooms)
+
+  const my_rooms= rooms.filter((room:Room)=>{
+      console.log("room.host_id",room.host_id)
+      console.log("userId",userId)
+      console.log("== or not ", room.host_id==userId)
+      return room.host_id==userId
+  })
 
   const printErr=(er:string|null)=>console.log(er)
   printErr(error)
@@ -98,6 +119,11 @@ export default function Home() {
       active={activeTab === "live"}
       onClick={() => setActiveTab("live")}
     />
+    <TabButton
+      label="My Rooms"
+      active={activeTab === "myRooms"}
+      onClick={() => setActiveTab("myRooms")}
+    />
   </div>
 
   <div className="absolute right-0">
@@ -110,8 +136,9 @@ export default function Home() {
   </div>
 </div>
         {createRoom&&<CreateRoom handleModalClose={handleCreateRoomClose} />}
-      {activeTab === "rooms" && <RoomsTab  rooms={ rooms}/>}
-      {activeTab === "live" && <LiveRoomsTab liverooms={live_rooms} />}
+      {activeTab === "rooms" && <RoomsTab  rooms={rooms}  user={userId} />}
+      {activeTab === "live" && <RoomsTab rooms={live_rooms}  user={userId} />}
+      {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  user={userId} />}
     </div>
   );
 }

@@ -48,7 +48,7 @@ export const SignUp = () => {
 
         if (response) {
           console.log("Signup successful:", response);
-          router.push("/home")
+          router.push("/login")
         }
       } catch (err) {
         console.log("Signup ", err)
