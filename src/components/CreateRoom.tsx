@@ -3,7 +3,7 @@
 import {useEffect, useState} from "react";
 import useFetch from "@/src/apis/apis";
 import {CreateRoomPayload} from "@/src/types/room";
-export default function CreateRoom({ handleModalClose ,handleRoomEditClose , roomEdit ,isRoomEdit}: { handleModalClose: () => void,roomEdit:any,isRoomEdit:boolean,handleRoomEditClose:()=>void}) {
+export default function CreateRoom({ handleModalClose ,handleRoomEditClose , roomEdit ,isRoomEdit,refreshRooms}: { handleModalClose: () => void,roomEdit:any,isRoomEdit:boolean,handleRoomEditClose:()=>void ,refreshRooms:()=>void}) {
   const { error, isLoading, fetchData} = useFetch()
   const URL: string = String(process.env.NEXT_PUBLIC_API_URL)
 
@@ -80,6 +80,7 @@ export default function CreateRoom({ handleModalClose ,handleRoomEditClose , roo
 
         if (response){
           console.log("Response ",response)
+          refreshRooms();
         }
 
       }catch (err){

@@ -71,7 +71,6 @@ export default function Home() {
 
   }, []);
 
-  useEffect( ()=>{
     const fetchRooms =async ()=>{
     try{
 
@@ -92,7 +91,8 @@ export default function Home() {
         console.log(err)
       }
     }
-  fetchRooms()
+  useEffect( ()=>{
+    fetchRooms()
   },[URL])
 
   const rooms = data?.filter((room:Room)=>!room.is_private) ?? []
@@ -146,7 +146,7 @@ export default function Home() {
     </button>
   </div>
 </div>
-      {(createRoom || isRoomEdit) && <CreateRoom handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   />}
+      {(createRoom || isRoomEdit) && <CreateRoom handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   refreshRooms={fetchRooms} />}
       {activeTab === "rooms" && <RoomsTab  rooms={rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
       {activeTab === "live" && <RoomsTab rooms={live_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit}/>}
       {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
