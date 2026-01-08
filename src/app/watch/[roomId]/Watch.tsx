@@ -32,7 +32,7 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
       setIsConnected(false);
     };
 
-    ws.onerror = (e) => console.error("WS Error", e);
+    // ws.onerror = (e) => console.error("WS Error", e);
 
     return () => {
       ws.close();
@@ -42,18 +42,27 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
 
   return (
       <div className="flex w-screen h-screen p-2 gap-4 bg-yellow-900">
-    {isConnected && room ? (
-      <>
-        <div className="w-2/3 h-full flex flex-col justify-start gap-4">
-          <VideoPlayer
-            videoUrl={room.video_url ?? null}
-            isHost={isHost}
-            socket={socketRef.current}
-          />
-          <MembersList members={room.members ?? []} />
-        </div>
+    { isConnected && room ? (
+      <><div className="w-2/3 h-full flex flex-col justify-between gap-4">
 
-        <Chat socket={socketRef.current} isHost={isHost} />
+            <div className="flex-shrink-0 min-h-[60%]">
+              <VideoPlayer
+                videoUrl={room.video_url ?? null}
+                isHost={isHost}
+                socket={socketRef.current}
+              />
+            </div>
+
+            <div className="flex-shrink-0 min-h-[20%]">
+              <MembersList
+                members={
+                  Array.from(new Map((room.members ?? []).map(m => [m.id, m])).values())
+                }
+              />
+            </div>
+          </div>
+
+        <Chat socket={socketRef.current} isHost={isHost} room={room} />
       </>
     ) : (
       <div className="text-white p-4">Connecting to room...</div>

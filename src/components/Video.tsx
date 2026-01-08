@@ -59,18 +59,32 @@ useEffect(() => {
           console.log("Player Ready");
           if (isAdmin) event.target.playVideo();
         },
-        onStateChange: (e: any) => {
-          if (!isAdmin || !socket) return;
-          const time = playerRef.current.getCurrentTime();
-          const action =
-            e.data === window.YT.PlayerState.PLAYING
-              ? "play"
-              : e.data === window.YT.PlayerState.PAUSED
-              ? "pause"
-              : "seek";
+       onStateChange: (e: any) => {
+        if (!isAdmin || !socket) return;
 
-          socket.send(JSON.stringify({ type: "video_action", video_id: videoIdRef.current, action, time ,chat_msg: `Host ${action}ed the video at ${time.toFixed(2)}s`}));
-        },
+        const time = playerRef.current.getCurrentTime();
+        let action: "play" | "pause" | null = null;
+
+        if (e.data === window.YT.PlayerState.PLAYING) action = "play";
+        else if (e.data === window.YT.PlayerState.PAUSED) action = "pause";
+
+        if (action) {
+          const chat_msg = `Host ${action=="play" ? "played" : action=="pause" ? "paused" : ""} the video at ${time.toFixed(2)}s`;
+
+          socket.send(JSON.stringify({
+            type: "video_action",
+            video_id: videoIdRef.current,
+            action,
+            time
+          }));
+
+          socket.send(JSON.stringify({
+            type: "chat",
+            message: chat_msg,
+            sender: "<HOST>"
+          }));
+        }
+      },
       },
     });
   };
@@ -114,7 +128,7 @@ useEffect(() => {
   }, [socket, isAdmin]);
 
   return (
-    <div className="h-2/3 bg-black rounded-2xl">
+    <div className=" bg-black rounded-2xl">
       <div id="player" className="w-full h-full rounded-2xl" style={{ minHeight: "80vh" }} />
     </div>
   );
