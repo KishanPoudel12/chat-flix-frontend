@@ -8,6 +8,7 @@ import useFetch from "@/src/apis/apis";
 import {Room, RoomsResponse} from "@/src/types/room";
 
 import {jwtDecode} from "jwt-decode";
+import {useRouter} from "next/navigation";
 
 
 interface JwtPayload {
@@ -47,6 +48,13 @@ export default function Home() {
   const [userId, setUserId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("rooms");
   const [createRoom, setCreateRoom]=useState<boolean>(false)
+    //Edit
+  const [isRoomEdit,setIsRoomEdit]=useState<boolean>(false)
+  const [roomEdit,setRoomEdit]=useState<number|null>(null)
+
+  const handleRoomEdit=()=>setIsRoomEdit(true)
+  const handleRoomEditClose=()=>setIsRoomEdit(false)
+
   const { data, error, isLoading, fetchData } = useFetch()
   const URL: string = String(process.env.NEXT_PUBLIC_API_URL)
 
@@ -89,10 +97,13 @@ export default function Home() {
 
   const rooms = data?.filter((room:Room)=>!room.is_private) ?? []
   console.log(rooms)
-  const live_rooms= rooms.filter((room:Room)=> room.is_live)
+  const live_rooms= data?.filter((room:Room)=> room.is_live && !room.is_private)
   console.log(live_rooms)
 
-  const my_rooms= rooms.filter((room:Room)=>{
+
+
+    console.log("ROOM TO EDIT", roomEdit)
+  const my_rooms= data?.filter((room:Room)=>{
       console.log("room.host_id",room.host_id)
       console.log("userId",userId)
       console.log("== or not ", room.host_id==userId)
@@ -135,10 +146,10 @@ export default function Home() {
     </button>
   </div>
 </div>
-        {createRoom&&<CreateRoom handleModalClose={handleCreateRoomClose} />}
-      {activeTab === "rooms" && <RoomsTab  rooms={rooms}  user={userId} />}
-      {activeTab === "live" && <RoomsTab rooms={live_rooms}  user={userId} />}
-      {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  user={userId} />}
+      {(createRoom || isRoomEdit) && <CreateRoom handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   />}
+      {activeTab === "rooms" && <RoomsTab  rooms={rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
+      {activeTab === "live" && <RoomsTab rooms={live_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit}/>}
+      {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
     </div>
   );
 }

@@ -78,6 +78,7 @@ export const Login = () => {
             type="submit"
             className="w-full bg-yellow-600 text-white py-3 rounded-lg font-semibold hover:bg-yellow-700 focus:ring-2 focus:ring-yellow-400 transition"
             onClick={handleLoginSubmit}
+            disabled={isLoading}
           >
              {isLoading? "Loading" : "Log In"}
           </button>

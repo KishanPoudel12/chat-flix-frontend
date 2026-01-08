@@ -48,11 +48,11 @@ export const SignUp = () => {
 
         if (response) {
           console.log("Signup successful:", response);
-          router.push("/login")
+          localStorage.setItem("access_token", response.access_token)
+          router.push("/home")
         }
       } catch (err) {
         console.log("Signup ", err)
-
       }
     }
     const printerr=(error:any)=> console.log(error)
