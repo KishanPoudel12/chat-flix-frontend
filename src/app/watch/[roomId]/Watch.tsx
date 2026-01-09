@@ -41,11 +41,12 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
   }, [room]);
 
   return (
-      <div className="flex  h-full w-full p-2  gap-4 bg-yellow-900">
+      <div className="flex  h-screen w-full p-2  gap-4 bg-yellow-900">
     { isConnected && room ? (
-      <><div className="w-2/3 h-full flex flex-col justify-between gap-4">
+      <>
+        <div className="w-2/3 h-full flex flex-col justify-between gap-4">
 
-            <div className="flex-shrink-0 min-h-[60%]">
+            <div className="flex-shrink-0 min-h-[60%] flex-2">
               <VideoPlayer
                 videoUrl={room.video_url ?? null}
                 isHost={isHost}
@@ -53,7 +54,7 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
               />
             </div>
 
-            <div className="flex-shrink-0 min-h-[20%]">
+            <div className="flex-shrink-0 min-h-[20%] flex1">
               <MembersList
                 members={
                   Array.from(new Map((room.members ?? []).map(m => [m.id, m])).values())
