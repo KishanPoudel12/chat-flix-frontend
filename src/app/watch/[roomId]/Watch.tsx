@@ -68,6 +68,7 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
       <div className="text-white p-4">Connecting to room...</div>
     )}
   </div>
+
   );
 };
 
