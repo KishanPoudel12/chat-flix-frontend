@@ -44,6 +44,7 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
       <div className="flex h-screen w-full p-2  gap-4 bg-yellow-900">
     { isConnected && room ? (
       <>
+
         <div className="w-2/3  flex flex-col justify-between gap-4">
             <div className="flex-shrink-0 min-h-[60%] flex-2">
               <VideoPlayer
