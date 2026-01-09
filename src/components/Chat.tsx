@@ -69,7 +69,7 @@ const Chat = ({ socket, isHost, room }: ChatProps) => {
     }, [messages]);
 
   return (
-    <div className="w-1/3 bg-gray-900 flex flex-col border-l border-gray-800 rounded-2xl">
+    <div className="w-1/3 h-full  bg-gray-900 flex flex-col border-l border-gray-800 rounded-2xl">
       <div className="flex justify-between items-start p-4 border-b border-gray-800 bg-gradient-to-r from-yellow-900 to-yellow-800 rounded-t-2xl">
         <div>
           <h2 className="text-lg font-semibold mb-2 text-yellow-300">Room Info</h2>
