@@ -41,7 +41,7 @@ const Watch = ({ room, isHost }: { room: Room | null; isHost: boolean }) => {
   }, [room]);
 
   return (
-      <div className="flex w-screen h-screen p-2 gap-4 bg-yellow-900">
+      <div className="flex h-full w-full p-1  gap-4 bg-yellow-900">
     { isConnected && room ? (
       <><div className="w-2/3 h-full flex flex-col justify-between gap-4">
 

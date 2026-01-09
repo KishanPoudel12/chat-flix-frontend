@@ -9,20 +9,19 @@ interface Props {
 }
 
 export default function WatchPageClient() {
-  const router= useRouter()
+  const router = useRouter()
   const params = useParams();
   const roomId = Number(params?.roomId);
-  console.log("RoomID",roomId)
+  console.log("RoomID", roomId)
   const [room, setRoom] = useState<Room | null>(null);
-  const [isHost, setIsHost] = useState<boolean >(false);
-
+  const [isHost, setIsHost] = useState<boolean>(false);
 
 
   useEffect(() => {
 
     if (!roomId || isNaN(roomId)) {
-    console.error("Invalid RoomID:", params?.roomId);
-    router.replace("/");
+      console.error("Invalid RoomID:", params?.roomId);
+      router.replace("/");
     }
     const token = localStorage.getItem("access_token");
 
@@ -30,23 +29,29 @@ export default function WatchPageClient() {
     const fetchData = async () => {
       const [roomRes, roleRes] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${roomId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         }),
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${roomId}/role`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         }),
       ]);
 
       const roomData = await roomRes.json();
       const roleData = await roleRes.json();
-      console.log("Role Data ",roleData)
+      console.log("Role Data ", roleData)
       setRoom(roomData);
       setIsHost(roleData.is_host);
     };
     fetchData();
-}, [roomId, params?.roomId, router]);
+  }, [roomId, params?.roomId, router]);
 
   if (!room) return <div>Loading...</div>;
 
-  return <Watch room={room} isHost={isHost} />;
+  return (
+
+      <div className="h-screen w-screen ">
+        <Watch room={room} isHost={isHost}/>
+      </div>
+
+  )
 }

@@ -34,7 +34,6 @@ export const SignUp = () => {
       try {
         const route= guest ? "/users/guest": "/users/create"
 
-
         const formdata = new FormData()
         formdata.append("username", signUp.username)
         formdata.append("email", signUp.email)

@@ -13,7 +13,7 @@ export default function RoomsTab({liverooms}:{liverooms:RoomsResponse}) {
         >
           <div>
             <h3 className="font-semibold text-lg text-gray-800 mb-1">
-              {room.room_name}
+              {room.room_name}]
             </h3>
             <p className="text-sm text-gray-500 mb-2">
               {room.room_description}
@@ -27,7 +27,6 @@ export default function RoomsTab({liverooms}:{liverooms:RoomsResponse}) {
               {room.is_live ? "🔴 Live" : "⏳ Scheduled"} • {room.current_members} / {room.max_members} members
             </p>
           </div>
-
           <button
             className={`mt-auto px-4 py-2 rounded-md font-medium transition ${
               room.is_live
