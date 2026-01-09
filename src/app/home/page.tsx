@@ -148,7 +148,7 @@ export default function Home() {
     </button>
   </div>
 </div>
-      {(createRoom || isRoomEdit) && <CreateRoom isGuest={isGuest} handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   refreshRooms={fetchRooms} />}
+      {(createRoom || isRoomEdit) && <CreateRoom isGuest={isGuest} handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find((r:Room) => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   refreshRooms={fetchRooms} />}
       {activeTab === "rooms" && <RoomsTab  rooms={rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
       {activeTab === "live" && <RoomsTab rooms={live_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit}/>}
       {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}

@@ -70,7 +70,7 @@ export const SignUp = () => {
               <h1 className="text-3xl font-bold text-yellow-800">Create Account</h1>
               <p className="text-gray-500 mt-2">Join us and start your journey </p>
             </div>
-            {error && <p className="text-red-500 text-sm mb-4 text-center">{error.detail }</p>}
+            {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
 
             <form className="space-y-6" onSubmit={handleSignUpSubmit}>
               <div>

@@ -1,4 +1,4 @@
-import Room, {RoomsResponse} from "./../types/room"
+import { RoomsResponse} from "./../types/room"
 
 
 
@@ -11,7 +11,6 @@ export default function RoomsTab({liverooms}:{liverooms:RoomsResponse}) {
           key={ind}
           className="flex flex-col justify-between p-4 bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer"
         >
-          {/* Room Info */}
           <div>
             <h3 className="font-semibold text-lg text-gray-800 mb-1">
               {room.room_name}

@@ -48,7 +48,7 @@ export const Login = () => {
         </div>
             {error && <p className="text-red-500 text-sm mb-4 text-center">{error }</p>}
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLoginSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
@@ -77,7 +77,6 @@ export const Login = () => {
           <button
             type="submit"
             className="w-full bg-yellow-600 text-white py-3 rounded-lg font-semibold hover:bg-yellow-700 focus:ring-2 focus:ring-yellow-400 transition"
-            onClick={handleLoginSubmit}
             disabled={isLoading}
           >
              {isLoading? "Loading" : "Log In"}

@@ -33,5 +33,5 @@ export interface CreateRoomPayload {
   video_url: string;
   video_provider: string ; // adjust if needed
   is_private: boolean;
-  max_members: number;
+  max_members: string;
 }
