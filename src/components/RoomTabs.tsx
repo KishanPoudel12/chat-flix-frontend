@@ -71,25 +71,31 @@ export default function RoomsTab({
               className="relative flex flex-col justify-between p-4 bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer group"
             >
               {room.host_id === Number(userId) && (
-                <>
+                <div className="absolute right-2 top-2 flex flex-row gap-2">
+                  <button
+                    className=" right-10 top-2 text-gray-400 hover:bg-yellow-500 rounded-2xl p-1"
+                    title= {room.is_private ? "Private" : "Public"}
+                  >
+                    {room.is_private ? "🔒" : "🌎"}
+                  </button>
                   <button
                     onClick={() => {
                       setRoomEdit(room.id)
                       handleRoomEdit()
                     }}
-                    className="absolute right-12 top-2 text-gray-400 hover:bg-green-500 rounded-2xl p-1"
+                    className=" right-12 top-2 text-gray-400 hover:bg-green-500 rounded-2xl p-1"
                     title="Edit room"
                   >
                     ✎
                   </button>
                   <button
                     onClick={() => handleDeleteRoom(Number(room.id))}
-                    className="absolute right-2 top-2 text-gray-400 hover:bg-red-500 rounded-2xl p-1"
+                    className=" right-2 top-2 text-gray-400 hover:bg-red-500 rounded-2xl p-1"
                     title="Delete room"
                   >
                     🗑
                   </button>
-                </>
+                </div>
               )}
 
               <div>

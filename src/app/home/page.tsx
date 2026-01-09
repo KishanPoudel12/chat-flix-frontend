@@ -13,6 +13,7 @@ import {useRouter} from "next/navigation";
 
 interface JwtPayload {
   user_id: number;
+  is_guest?:boolean|null;
   exp:number;
 }
 
@@ -48,6 +49,7 @@ export default function Home() {
   const [userId, setUserId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("rooms");
   const [createRoom, setCreateRoom]=useState<boolean>(false)
+  const [isGuest, setIsGuest]= useState<boolean>(false)
     //Edit
   const [isRoomEdit,setIsRoomEdit]=useState<boolean>(false)
   const [roomEdit,setRoomEdit]=useState<number|null>(null)
@@ -67,13 +69,14 @@ export default function Home() {
     if (token) {
       const decoded = jwtDecode<JwtPayload>(token);
       setUserId(decoded.user_id)
+      if  (decoded?.is_guest){
+          setIsGuest(true)
+      }
     }
-
   }, []);
 
     const fetchRooms =async ()=>{
     try{
-
       const token = localStorage.getItem("access_token");
       const response =await  fetchData(URL+"/rooms/",{
         method: "GET",
@@ -103,7 +106,7 @@ export default function Home() {
 
 
     console.log("ROOM TO EDIT", roomEdit)
-  const my_rooms= data?.filter((room:Room)=>{
+    const my_rooms= data?.filter((room:Room)=>{
       console.log("room.host_id",room.host_id)
       console.log("userId",userId)
       console.log("== or not ", room.host_id==userId)
@@ -117,25 +120,24 @@ export default function Home() {
       <div className=" bg-yellow-50 px-6  py-4 w-full" >
      <div className="relative mb-6 h-14 flex items-center justify-center">
               {error && <p className="text-red-500 text-sm mb-4 text-center">{ error  }</p>}
-
               {isLoading && <p className="text-red-500 text-sm mb-4 text-center">{isLoading }</p>}
-<div className="flex gap-3  p-1 rounded-full  animate-none">
-    <TabButton
-      label="Rooms"
-      active={activeTab === "rooms"}
-      onClick={() => setActiveTab("rooms")}
-    />
-    <TabButton
-      label="Live Rooms"
-      active={activeTab === "live"}
-      onClick={() => setActiveTab("live")}
-    />
-    <TabButton
-      label="My Rooms"
-      active={activeTab === "myRooms"}
-      onClick={() => setActiveTab("myRooms")}
-    />
-  </div>
+         <div className="flex gap-3  p-1 rounded-full  animate-none">
+            <TabButton
+              label="Rooms"
+              active={activeTab === "rooms"}
+              onClick={() => setActiveTab("rooms")}
+            />
+            <TabButton
+              label="Live Rooms"
+              active={activeTab === "live"}
+              onClick={() => setActiveTab("live")}
+            />
+            <TabButton
+              label="My Rooms"
+              active={activeTab === "myRooms"}
+              onClick={() => setActiveTab("myRooms")}
+            />
+          </div>
 
   <div className="absolute right-0">
     <button
@@ -146,7 +148,7 @@ export default function Home() {
     </button>
   </div>
 </div>
-      {(createRoom || isRoomEdit) && <CreateRoom handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   refreshRooms={fetchRooms} />}
+      {(createRoom || isRoomEdit) && <CreateRoom isGuest={isGuest} handleModalClose={handleCreateRoomClose}  roomEdit={roomEdit ? my_rooms?.find(r => r.id === roomEdit) : undefined} isRoomEdit={isRoomEdit} handleRoomEditClose={handleRoomEditClose}   refreshRooms={fetchRooms} />}
       {activeTab === "rooms" && <RoomsTab  rooms={rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}
       {activeTab === "live" && <RoomsTab rooms={live_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit}/>}
       {activeTab === "myRooms" && <RoomsTab rooms={my_rooms}  userId={userId} setRoomEdit={setRoomEdit} handleRoomEdit={handleRoomEdit} />}

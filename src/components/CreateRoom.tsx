@@ -3,7 +3,7 @@
 import {useEffect, useState} from "react";
 import useFetch from "@/src/apis/apis";
 import {CreateRoomPayload} from "@/src/types/room";
-export default function CreateRoom({ handleModalClose ,handleRoomEditClose , roomEdit ,isRoomEdit,refreshRooms}: { handleModalClose: () => void,roomEdit:any,isRoomEdit:boolean,handleRoomEditClose:()=>void ,refreshRooms:()=>void}) {
+export default function CreateRoom({  isGuest,handleModalClose ,handleRoomEditClose , roomEdit ,isRoomEdit,refreshRooms}: { isGuest:boolean ,handleModalClose: () => void,roomEdit:any,isRoomEdit:boolean,handleRoomEditClose:()=>void ,refreshRooms:()=>void}) {
   const { error, isLoading, fetchData} = useFetch()
   const URL: string = String(process.env.NEXT_PUBLIC_API_URL)
 
@@ -113,6 +113,44 @@ export default function CreateRoom({ handleModalClose ,handleRoomEditClose , roo
     }
   }, [isRoomEdit, roomEdit]);
   return (
+      isGuest ?
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div className="w-[90%] max-w-md rounded-xl bg-white dark:bg-gray-900 shadow-xl p-8 text-center">
+
+    <div className="flex justify-center mb-5">
+      <div className="h-14 w-14 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-600 text-2xl">
+        🚫
+      </div>
+    </div>
+
+    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+      Action Restricted
+    </h2>
+
+    <p className="mt-3  text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+      Guests are not allowed to create rooms. <br/>
+      Please sign up or log in as a non-guest user to unlock this feature.
+    </p>
+
+    <div className=" flex justify-center gap-4">
+      <button
+        onClick={handleModalClose}
+        className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+      >
+        Close
+      </button>
+
+      <button
+        onClick={() => (window.location.href = "/signup")}
+        className="px-4 py-2 rounded-md bg-yellow-500 text-white hover:bg-yellow-600 transition"
+      >
+        Sign Up
+      </button>
+    </div>
+  </div>
+</div>
+
+          :
     <div className="fixed  min-h-screen min-w-screen inset-0 bg-yellow-450 bg-opacity-900 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-md p-6">
         <h2 className="text-xl font-semibold text-yellow-600 mb-4">Create Room</h2>

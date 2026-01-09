@@ -5,6 +5,7 @@ import useFetch from "./../apis/apis"
 import {useRouter} from "next/navigation"
 export const SignUp = () => {
   const router =useRouter()
+  const [guest, setGuest]=useState<boolean>(false)
   const URL: string = String(process.env.NEXT_PUBLIC_API_URL)
   const { error, isLoading, fetchData} = useFetch()
 
@@ -31,6 +32,9 @@ export const SignUp = () => {
       e.preventDefault()
       console.log(signUp)
       try {
+        const route= guest ? "/users/guest": "/users/create"
+
+
         const formdata = new FormData()
         formdata.append("username", signUp.username)
         formdata.append("email", signUp.email)
@@ -39,36 +43,36 @@ export const SignUp = () => {
           formdata.append("image", signUp.image)
         }
 
-
-        const response = await fetchData(URL + "/users/create", {
+        const Options = guest ? {
+          method: "POST"
+        }: {
           method: "POST",
           body: formdata,
-        })
-        console.log(URL + "/users/create")
+        }
+
+        const response = await fetchData(URL + route,Options)
 
         if (response) {
-          console.log("Signup successful:", response);
+          console.log("Signup successful--------------:", response);
           localStorage.setItem("access_token", response.access_token)
           router.push("/home")
         }
       } catch (err) {
         console.log("Signup ", err)
       }
+      setGuest(false)
     }
-    const printerr=(error:any)=> console.log(error)
-
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-yellow-50">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-            {/* Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-yellow-800">Create Account</h1>
               <p className="text-gray-500 mt-2">Join us and start your journey </p>
             </div>
-            {error && <p className="text-red-500 text-sm mb-4 text-center">{error }</p>}
+            {error && <p className="text-red-500 text-sm mb-4 text-center">{error.detail }</p>}
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSignUpSubmit}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <input
@@ -77,7 +81,7 @@ export const SignUp = () => {
                     name="username"
                     onChange={handleSignUp}
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 outline-none transition"
-                    required
+                    required={!guest}
                 />
               </div>
 
@@ -89,7 +93,7 @@ export const SignUp = () => {
                     name="email"
                     onChange={handleSignUp}
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 outline-none transition"
-                    required
+                    required={!guest}
                 />
               </div>
 
@@ -101,7 +105,7 @@ export const SignUp = () => {
                     name="password"
                     onChange={handleSignUp}
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 outline-none transition"
-                    required
+                    required={!guest}
                 />
               </div>
               <div>
@@ -112,21 +116,23 @@ export const SignUp = () => {
                     accept="image/*"
                     onChange={handleSignUp}
                     className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200 transition"
-                    required
+                    required={!guest}
                 />
               </div>
 
               <button
-                  type="submit"
                   className="w-full bg-yellow-600 text-white py-3 rounded-lg font-semibold hover:bg-yellow-700 focus:ring-2 focus:ring-yellow-400 transition"
-                  onClick={handleSignUpSubmit}
               >
                 {isLoading ? "Loading" : "Create Account"}
               </button>
 
               <button
-                  type="submit"
+                  type="button"
                   className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-950 focus:ring-2 focus:ring-yellow-400 transition"
+                  onClick={() => {
+                    setGuest(true)
+                    document.querySelector("form")?.requestSubmit()
+                  }}
               >
                 Create Guest Account
               </button>
