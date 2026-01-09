@@ -49,7 +49,7 @@ export default function WatchPageClient() {
 
   return (
 
-      <div className="inset-0 min-h-screen min-w-screen ">
+      <div className="inset-0 min-h-[100%] min-w-[100%]  ">
         <Watch room={room} isHost={isHost}/>
       </div>
   )
